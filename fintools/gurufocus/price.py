@@ -19,7 +19,7 @@ class GuruPriceHistory:
     def _price_df(self):
 
         price_list = self.api_data
-        price_df = pd.DataFrame(price_list, columns=['price_date', 'share_price'])
+        price_df = pd.DataFrame(price_list, columns=['PriceDate', 'PricePerShare'])
 
         return price_df
 
@@ -27,6 +27,6 @@ class GuruPriceHistory:
     def _price_df_normalized(self):
 
         price_list = self.api_data
-        price_df = pd.DataFrame(price_list, columns=['price_date', 'share_price'])
+        price_df = pd.DataFrame(price_list, columns=['PriceDate', 'PricePerShare'])
 
         return price_df
