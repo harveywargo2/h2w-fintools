@@ -11,6 +11,7 @@ class DividendPriceDataFrame:
         self.price_df = kwargs.get('price_df', 'error')
         self.lookback = kwargs.get('lookback_years', 20)
         self.dividend_price_df = self._dividend_price()
+        self.dividend_price_df_aggr = self._dividend_price_aggr()
 
 
     def _dividend_price(self):
@@ -35,6 +36,7 @@ class DividendPriceDataFrame:
 
         merged_df1 = pd.merge(price_df1, div_df2, on='Date', how='left')
         merged_df1['DividendAmount'] = merged_df1['DividendAmount'].fillna(0)
+        merged_df1['DividendPaid'] = merged_df1['DividendAmount']
 
         for index, row in merged_df1.iterrows():
             if row['DividendAmount'] > 0:
@@ -52,4 +54,21 @@ class DividendPriceDataFrame:
 
         return merged_df1
 
-    
+
+    def _dividend_price_aggr(self):
+        df1 = self.dividend_price_df
+        df1 = df1.set_index('Date')
+
+        df2 = df1.groupby(df1.index.year).agg(
+            SharePriceMin=pd.NamedAgg(column='PricePerShare', aggfunc='min'),
+            SharePriceMax=pd.NamedAgg(column='PricePerShare', aggfunc='max'),
+            SharePriceMean=pd.NamedAgg(column='PricePerShare', aggfunc='mean'),
+            SharePriceMedian=pd.NamedAgg(column='PricePerShare', aggfunc='median'),
+            DivYieldMin=pd.NamedAgg(column='ForwardDividendYield', aggfunc='min'),
+            DivYieldMax=pd.NamedAgg(column='ForwardDividendYield', aggfunc='max'),
+            DivYieldMean=pd.NamedAgg(column='ForwardDividendYield', aggfunc='mean'),
+            DivYieldMedian=pd.NamedAgg(column='ForwardDividendYield', aggfunc='median'),
+            DividendPaidCy=pd.NamedAgg('DividendPaid', aggfunc='sum')
+        )
+
+        return df2
