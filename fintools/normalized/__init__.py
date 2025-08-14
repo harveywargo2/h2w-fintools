@@ -1,0 +1,2 @@
+from fintools.normalized.dividend_price_dataframe import DividendPriceDataFrame
+
