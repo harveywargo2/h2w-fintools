@@ -27,7 +27,11 @@ class GuruDividendHistory:
         div_df = pd.DataFrame(div_list)
         div_df = div_df.rename(columns={
             'amount': 'DividendAmount',
-            'type': 'DividendType'
+            'type': 'DividendType',
+            'currency': 'Currency',
+            'ex_date': 'ExDate',
+            'record_date': 'RecordDate',
+            'pay_date': 'PayDate',
         })
         div_df['DividendType'] = div_df['DividendType'].replace('Cash Div.', 'regular')
         div_df['DividendType'] = div_df['DividendType'].replace('Special Div.', 'special')
