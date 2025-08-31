@@ -1,7 +1,15 @@
 import os
-from pathlib import Path
 
 
+def desktop_path():
+    home = os.path.expanduser('~')
 
-desktop_path = Path.home() / 'Desktop'
-desktop_os = os.path.join(os.path.expanduser('~'), 'Desktop')
+    if os.name == 'nt':
+        desktop_path = os.path.join(home, 'Desktop')
+    elif os.name == 'posix':
+        desktop_path = os.path.join(home, 'Desktop')
+    else:
+        return None
+
+    return desktop_path
+
